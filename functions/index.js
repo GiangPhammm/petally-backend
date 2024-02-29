@@ -34,6 +34,21 @@ app.post('/signup', (req, res) => {
     })();
 })
 
+// Get account
+app.post('/get/user/:id', (req, res) => {
+    (async () => {
+        try {
+            const document = db.collection('accounts').doc(req.params.id);
+            let account = await document.get();
+            let response = account.data()
+
+            return res.status(200).send(response);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+})
 
 
 // Export api to firebase cloud functions
