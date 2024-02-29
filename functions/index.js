@@ -14,6 +14,7 @@ const db = admin.firestore();
 
 // Allow another domain origin
 const cors = require('cors');
+const { QuerySnapshot } = require('firebase-admin/firestore');
 app.use(cors({origin: true}));
 
 // Signup
@@ -34,8 +35,8 @@ app.post('/signup', (req, res) => {
     })();
 })
 
-// Get account
-app.post('/get/user/:id', (req, res) => {
+// Get account by id
+app.get('/user/:id', (req, res) => {
     (async () => {
         try {
             const document = db.collection('accounts').doc(req.params.id);
@@ -48,8 +49,71 @@ app.post('/get/user/:id', (req, res) => {
             return res.status(500).send(error);
         }
     })();
+});
+
+// Get all accounts
+app.get('/users', (req, res) => {
+    (async () => {
+        try {
+            const query = db.collection('accounts');
+            let response = [];
+
+            await query.get().then(QuerySnapshot => {
+                let docs = QuerySnapshot.docs;
+                
+                for (let doc of docs) {
+                    const selectedItem = {
+                        id: doc.id,
+                        username: doc.data().username,
+                        email: doc.data().email,
+                    }
+                    response.push(selectedItem);
+                }
+
+                return response;
+            })
+
+            return res.status(200).send(response);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
+
+// Update account by id
+app.post('/update/user/:id', (req, res) => {
+    (async () => {
+        try {
+            const document = db.collection('accounts').doc(req.params.id);
+            await document.update({
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password,
+            })
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+
+            return res.status(500).send(error);
+        }
+    })();
 })
 
+// Delete account
+app.delete('/delete/user/:id', (req, res) => {
+    (async () => {
+        try {
+            const document = db.collection('accounts').doc(req.params.id);
+            await document.delete();
+
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    })();
+});
 
 // Export api to firebase cloud functions
 exports.app = functions.https.onRequest(app)
