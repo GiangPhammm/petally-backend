@@ -1,48 +1,29 @@
-const functions = require('firebase-functions');
-const express = require('express');
-// Grant firebase admin right
-const admin = require('firebase-admin');
-const serviceAccount = require('./secrets/permissions.json');
+import functions from 'firebase-functions';
+import express from 'express';
+import admin from 'firebase-admin';
+import cors from 'cors';
 
+import serviceAccount from './secrets/permissions.json';
+import * as routes from './routes/index.js';
+
+// Grant firebase admin right
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
 
-const authMiddleware = require('./authMiddleware');
-app.use(authMiddleware); // apply auth to all routes
-
 const app = express();
-const port = 5001;
 const db = admin.firestore();
-// Allow another domain origin
-const cors = require('cors');
 
+// Apply authentification to all routes
+// app.use(authMiddleware);
+
+// Allow another domain origin
 app.use(cors({origin: true}));
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`)
-})
-
-// Signup
-app.post('/user/signup', (req, res) => {
-    (async () => {
-        try {
-            await db.collection('accounts').doc('/' + req.body.id + '/')
-                .create({
-                    username: req.body.username,
-                    email: req.body.email,
-                    password: req.body.password,
-                });
-            return res.status(200).send();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send(error);
-        }
-    })();
-});
+routes.signupWithEmailAndPassword(app, admin);
 
 // Login
-// app.post('/user/login', middleware, (req, res) => { 
+// app.post('/user/login', middleware, (req, res) => {
 app.post('/user/login', (req, res) => {
     (async () => {
         try {
@@ -140,4 +121,4 @@ app.delete('/delete/user/:id', (req, res) => {
 });
 
 // Export api to firebase cloud functions
-exports.app = functions.https.onRequest(app);
+export default functions.https.onRequest(app);
