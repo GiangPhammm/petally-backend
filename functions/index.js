@@ -3,8 +3,8 @@ import express from 'express';
 import admin from 'firebase-admin';
 import cors from 'cors';
 
-import serviceAccount from './secrets/permissions.json';
-import * as routes from './routes/index.js';
+import serviceAccount from './secrets/permissions.json' with {type: 'json'};
+import * as routes from './src/index.js';
 
 // Grant firebase admin right
 admin.initializeApp({
@@ -21,24 +21,7 @@ const db = admin.firestore();
 app.use(cors({origin: true}));
 
 routes.signupWithEmailAndPassword(app, admin);
-
-// Login
-// app.post('/user/login', middleware, (req, res) => {
-app.post('/user/login', (req, res) => {
-    (async () => {
-        try {
-            await db.collection('accounts').doc('/' + req.body.id + '/')
-                .create({
-                    email: req.body.email,
-                    password: req.body.password,
-                });
-            return res.status(200).send();
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send(error);
-        }
-    })();
-});
+routes.loginWithEmailAndPassword(app, admin);
 
 // Get account by id
 app.get('/user/:id', (req, res) => {
