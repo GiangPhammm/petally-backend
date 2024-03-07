@@ -1,6 +1,6 @@
 {
-  "name": "functions",
-  "description": "Cloud Functions for Firebase",
+  "name": "petally-backend",
+  "description": "Cloud database on Firebase",
   "type": "module",
   "scripts": {
     "serve": "firebase emulators:start --only functions",
@@ -17,6 +17,7 @@
   "dependencies": {
     "@google-cloud/firestore": "^7.3.0",
     "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
     "firebase-admin": "^11.8.0",
     "firebase-functions": "^4.3.1"
   },

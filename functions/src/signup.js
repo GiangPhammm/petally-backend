@@ -1,16 +1,19 @@
 // TODO: add check credential (email availability, password format etc.)
 
-export const signupWithEmailAndPassword = (app, admin) => {
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+
+export const signupWithEmailAndPassword = (app, auth) => {
     app.post('/signup', async (req, res) => {
+        const {email, password} = req.body;
         try {
-            const response = await admin.auth().createUser({
-                username: req.body.username,
-                email: req.body.email,
-                password: req.body.password,
-                emailVerified: false,
-                disabled: false,
-            });
+            const response = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password,
+            );
+
             res.json(response);
+
             return res.status(200).send();
         } catch (error) {
             return res.status(500).json({
