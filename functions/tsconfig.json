@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "target": "esnext",
+        "module": "esnext",
+        "noEmit": true,
+        "allowJs": true,
+        "checkJs": true,
+        "jsx": "preserve",
+        "experimentalDecorators": true,
+        "preserveSymlinks": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "strictNullChecks": false,
+        "ignoreDeprecations": "5.0",
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "types": [
+            "node",
+            "jest",
+        ],
+        "skipLibCheck": true
+    },
+    "include": [
+        "src/**/*",
+    ],
+}
