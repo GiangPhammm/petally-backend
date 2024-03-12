@@ -6,13 +6,11 @@ export const signupWithEmailAndPassword = (app, auth) => {
     app.post('/signup', async (req, res) => {
         const {email, password} = req.body;
         try {
-            const response = await createUserWithEmailAndPassword(
+            await createUserWithEmailAndPassword(
                 auth,
                 email,
                 password,
-            );
-
-            res.json(response);
+            ).then((response) => res.json(response));
 
             return res.status(200).send();
         } catch (error) {
