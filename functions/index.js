@@ -27,6 +27,8 @@ app.use(cors({origin: true}));
 
 routes.signupWithEmailAndPassword(app, auth);
 routes.loginWithEmailAndPassword(app, auth);
+routes.authenticateWithGoogle(app, auth);
+routes.authenticateWithFacebook(app, auth);
 routes.logout(app, auth);
 
 // Export api to firebase cloud functions
