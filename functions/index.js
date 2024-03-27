@@ -7,7 +7,7 @@ import {getAuth} from 'firebase/auth';
 
 import {firebaseConfig} from './secrets/firebase-config.js';
 import serviceAccount from './secrets/permissions.json' with {type: 'json'};
-import * as routes from './src/index.js';
+import * as routes from './src/routes/index.js';
 
 // Grant firebase admin right
 admin.initializeApp({

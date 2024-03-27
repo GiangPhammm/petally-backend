@@ -9,7 +9,7 @@ export const loginWithEmailAndPassword = async (app, auth) => {
         const {email, password} = req.body;
 
         try {
-            await signInWithEmailAndPassword(auth, email, password,
+            signInWithEmailAndPassword(auth, email, password,
             ).then((response) => {
                 res.json(response.user);
             });
