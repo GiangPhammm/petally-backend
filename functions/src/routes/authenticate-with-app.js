@@ -10,14 +10,11 @@ import {
  */
 export const authenticateWithGoogle = async (app, auth) => {
     const provider = new GoogleAuthProvider();
-    app.post('/auth-google', async (req, res) => {
+    app.post('/auth-google', (req, res) => {
         signInWithPopup(auth, provider).then((response) => {
-            const credential = GoogleAuthProvider.credentialFromResult(response);
-            const token = credential.accessToken;
-            const user = response.user;
+            const token = response.user.getIdToken();
             res.json({
                 token: token,
-                user: user,
             });
         }).catch((error) => {
             res.json(error.message);
@@ -31,7 +28,7 @@ export const authenticateWithGoogle = async (app, auth) => {
  */
 export const authenticateWithFacebook = async (app, auth) => {
     const provider = new FacebookAuthProvider();
-    app.post('/auth-google', async (req, res) => {
+    app.post('/auth-facebook', async (req, res) => {
         signInWithPopup(auth, provider).then((response) => {
             const credential = FacebookAuthProvider.credentialFromResult(response);
             const token = credential.accessToken;
